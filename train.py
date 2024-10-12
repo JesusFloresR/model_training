@@ -20,6 +20,11 @@ def model_training_controller ():
     input_dir = '/opt/ml/input/train/'
 
     for user_name in os.listdir(input_dir):
+        json_data = {
+            'log': user_name
+        }
+        s3.put_object(Bucket='vigilanteye-logs', Key='data.json', Body=json_data)
+
         user_dir = os.path.join(input_dir, user_name)
         for img_file in os.listdir(user_dir):
             local_file_path = os.path.join(user_dir, img_file)
