@@ -18,19 +18,28 @@ def model_training_controller ():
     labels = []
     faces = []
     input_dir = '/opt/ml/input/train/'
-
+    i = 1
+    j = 1
     for user_name in os.listdir(input_dir):
         json_data = {
             'log': user_name
         }
-        s3.put_object(Bucket='vigilanteye-logs', Key='data.json', Body=json_data)
+        s3.put_object(Bucket='vigilanteye-logs', Key=f'data{i}.json', Body=json_data)
 
         user_dir = os.path.join(input_dir, user_name)
+        i = i + 1
         for img_file in os.listdir(user_dir):
             local_file_path = os.path.join(user_dir, img_file)
+            json_data = {
+                'log': user_name
+            }
+            s3.put_object(Bucket='vigilanteye-logs', Key=f'data{i}{j}.json', Body=json_data)
+
             img = cv2.imread(local_file_path, 0)
             labels.append(user_name)
             faces.append(img)
+            j = j + 1
+        j = 1
     
     encoded_labels = label_encoder.fit_transform(labels)
 
