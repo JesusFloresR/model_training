@@ -15,7 +15,7 @@ def model_training_controller ():
     label_encoder = LabelEncoder()
     labels = []
     faces = []
-    input_dir = '/opt/ml/input/train/'
+    input_dir = '/opt/ml/input/data/train/'
 
     for user_name in os.listdir(input_dir):
         print('user_name: ' + user_name)
