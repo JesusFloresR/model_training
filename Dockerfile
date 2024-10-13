@@ -1,6 +1,6 @@
 FROM python:3.11-slim
 
-COPY . /opt/ml/code
+COPY train.py /opt/ml/code
 
 WORKDIR /opt/ml/code
 
