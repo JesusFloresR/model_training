@@ -3,7 +3,6 @@ import cv2
 import numpy as np
 from joblib import dump
 from sklearn.preprocessing import LabelEncoder
-import boto3
 
 # bucket = 'vigilenteye-faces-video'
 # people_list = os.listdir(path)
@@ -14,38 +13,20 @@ import boto3
 def model_training_controller ():
     print('Generando Codificador...')
     label_encoder = LabelEncoder()
-    s3 = boto3.client('s3')
     labels = []
     faces = []
     input_dir = '/opt/ml/input/train/'
-    i = 1
-    j = 1
-
-    json_data = {
-        'log': 'Empezando for'
-    }
-    s3.put_object(Bucket='vigilanteye-logs', Key=f'data0.json', Body=json_data)
 
     for user_name in os.listdir(input_dir):
-        json_data = {
-            'log': user_name
-        }
-        s3.put_object(Bucket='vigilanteye-logs', Key=f'data{i}.json', Body=json_data)
-
+        print('user_name: ' + user_name)
         user_dir = os.path.join(input_dir, user_name)
-        i = i + 1
         for img_file in os.listdir(user_dir):
             local_file_path = os.path.join(user_dir, img_file)
-            json_data = {
-                'log': local_file_path
-            }
-            s3.put_object(Bucket='vigilanteye-logs', Key=f'data{i}{j}.json', Body=json_data)
+            print('img_file: ' + img_file)
 
             img = cv2.imread(local_file_path, 0)
             labels.append(user_name)
             faces.append(img)
-            j = j + 1
-        j = 1
     
     encoded_labels = label_encoder.fit_transform(labels)
 
